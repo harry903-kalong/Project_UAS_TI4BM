@@ -14,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -120,6 +121,9 @@ public class MainForm extends javax.swing.JFrame {
         menuDashboard.setIconTextGap(10);
         menuDashboard.setInheritsPopupMenu(false);
         menuDashboard.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuDashboardMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 menuDashboardMouseEntered(evt);
             }
@@ -138,6 +142,9 @@ public class MainForm extends javax.swing.JFrame {
         menuCustomers.setIconTextGap(10);
         menuCustomers.setInheritsPopupMenu(false);
         menuCustomers.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuCustomersMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 menuCustomersMouseEntered(evt);
             }
@@ -355,7 +362,7 @@ public class MainForm extends javax.swing.JFrame {
         panelButtonLayout.setHorizontalGroup(
             panelButtonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelButtonLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(16, Short.MAX_VALUE)
                 .addComponent(buttonSignOut, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(buttonExit, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -387,7 +394,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(headerPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(buttonToggleMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -500,6 +507,30 @@ public class MainForm extends javax.swing.JFrame {
         menuLabelExited(menuOrder,"Order");
     }//GEN-LAST:event_menuOrderMouseExited
 
+    private void menuCustomersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuCustomersMouseClicked
+        clearMainPanel();
+        //add panel customer
+        JPanel panel = new PanelCustomer();
+        mainPanel.add(panel);
+        mainPanel.repaint();
+        mainPanel.revalidate();
+    }//GEN-LAST:event_menuCustomersMouseClicked
+
+    private void menuDashboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuDashboardMouseClicked
+        clearMainPanel();
+        //add panel customer
+        JPanel panel = new PanelHome();
+        mainPanel.add(panel);
+        mainPanel.repaint();
+        mainPanel.revalidate();
+    }//GEN-LAST:event_menuDashboardMouseClicked
+
+    private void clearMainPanel(){
+        mainPanel.removeAll();
+        mainPanel.repaint();
+        mainPanel.revalidate();
+    }
+    
     /**
      * @param args the command line arguments
      */
