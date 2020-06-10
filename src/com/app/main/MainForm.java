@@ -6,27 +6,15 @@
 package com.app.main;
 
 import com.app.entity.Customers;
-import com.app.commons.Constant;
-import java.awt.Color;
+import com.app.entity.PageResult;
+import com.app.services.CustomerService;
 import java.awt.Image;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import static java.lang.Thread.sleep;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  *
@@ -34,7 +22,9 @@ import org.json.JSONObject;
  */
 public class MainForm extends javax.swing.JFrame {
 
-    private List<Customers> list = new ArrayList<>();
+    private List<Customers> list;
+    private CustomerService service;
+    private PageResult<Customers> pageResult;
 
     /**
      * Creates new form MainForm
@@ -42,46 +32,21 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        service = new CustomerService();
         //        setIcon();
         try {
-            doRequest(1,10);
+            pageResult = service.getPage(1, 10);
+            Customers cus = service.getByID("ALFKI");
+            System.out.println("Company Name: " + cus.getCompanyName());
         } catch (Exception ex) {
             System.out.println("Error: " + ex.getMessage());
         }
 
-        list.forEach(cus -> {
-            System.out.println("Company Name: " + cus.getCompanyName());
-        });
+//        pageResult.getContent().forEach(cus -> {
+//            System.out.println("Company Name: " + cus.getCompanyName());
+//        });
     }
-
-    private void doRequest(int page, int pageSize) throws MalformedURLException, IOException {
-        list.clear();
-        String uri = Constant.BASE_URL + "customers?page=" + page + "&pageSize=" + pageSize;
-        URL url = new URL(uri);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        int status = con.getResponseCode();
-        if (status == 200) {
-            InputStreamReader in = new InputStreamReader(con.getInputStream());
-            BufferedReader br = new BufferedReader(in);
-            String line = "";
-            StringBuilder sb = new StringBuilder();
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-            System.out.println("Result: " + sb.toString());
-            JSONObject obj = new JSONObject(sb.toString());
-            JSONObject data = obj.getJSONObject("data");
-            JSONArray content = data.getJSONArray("content");
-            content.forEach(item -> {
-                JSONObject cus = (JSONObject) item;
-                Customers customers = new Customers(cus);
-                list.add(customers);
-            });
-            in.close();
-            br.close();
-        }
-    }
+   
 
     private void setIcon() {
         ImageIcon icon = new ImageIcon(getClass().getResource("/com/app/icons/northwindLogo1.png"));
