@@ -5,9 +5,19 @@
  */
 package com.app.main;
 
+import com.app.entity.Customers;
+import com.app.commons.Constant;
 import java.awt.Color;
 import java.awt.Image;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import static java.lang.Thread.sleep;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -15,6 +25,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
@@ -22,16 +34,56 @@ import javax.swing.JPanel;
  */
 public class MainForm extends javax.swing.JFrame {
 
+    private List<Customers> list = new ArrayList<>();
+
     /**
      * Creates new form MainForm
      */
     public MainForm() {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //setIcon();
+        //        setIcon();
+        try {
+            doRequest(1,10);
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+
+        list.forEach(cus -> {
+            System.out.println("Company Name: " + cus.getCompanyName());
+        });
     }
-    
-    private void setIcon(){
+
+    private void doRequest(int page, int pageSize) throws MalformedURLException, IOException {
+        list.clear();
+        String uri = Constant.BASE_URL + "customers?page=" + page + "&pageSize=" + pageSize;
+        URL url = new URL(uri);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        int status = con.getResponseCode();
+        if (status == 200) {
+            InputStreamReader in = new InputStreamReader(con.getInputStream());
+            BufferedReader br = new BufferedReader(in);
+            String line = "";
+            StringBuilder sb = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            System.out.println("Result: " + sb.toString());
+            JSONObject obj = new JSONObject(sb.toString());
+            JSONObject data = obj.getJSONObject("data");
+            JSONArray content = data.getJSONArray("content");
+            content.forEach(item -> {
+                JSONObject cus = (JSONObject) item;
+                Customers customers = new Customers(cus);
+                list.add(customers);
+            });
+            in.close();
+            br.close();
+        }
+    }
+
+    private void setIcon() {
         ImageIcon icon = new ImageIcon(getClass().getResource("/com/app/icons/northwindLogo1.png"));
         Image scaled = icon.getImage().getScaledInstance(jLabel2.getWidth(), jLabel2.getHeight(), Image.SCALE_SMOOTH);
         jLabel2.setIcon(new ImageIcon(scaled));
@@ -92,7 +144,7 @@ public class MainForm extends javax.swing.JFrame {
         menuMyAccount.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         menuMyAccount.setForeground(new java.awt.Color(255, 255, 255));
         menuMyAccount.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/app/icons/icons8_account_24px.png"))); // NOI18N
-        menuMyAccount.setText("My Account");
+        menuMyAccount.setText("MY Account");
         menuMyAccount.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 1));
         menuMyAccount.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         menuMyAccount.setIconTextGap(10);
@@ -430,7 +482,7 @@ public class MainForm extends javax.swing.JFrame {
 //        }
     }//GEN-LAST:event_buttonExitMouseClicked
 
-    
+
     private void buttonToggleMenuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonToggleMenuMouseClicked
         toggleMenu();
     }//GEN-LAST:event_buttonToggleMenuMouseClicked
@@ -492,19 +544,19 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_menuRegionMouseExited
 
     private void menuShipperMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuShipperMouseEntered
-        menuLabelEntered(menuShipper,"Shipper");
+        menuLabelEntered(menuShipper, "Shipper");
     }//GEN-LAST:event_menuShipperMouseEntered
 
     private void menuShipperMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuShipperMouseExited
-        menuLabelExited(menuShipper,"Shipper");
+        menuLabelExited(menuShipper, "Shipper");
     }//GEN-LAST:event_menuShipperMouseExited
 
     private void menuOrderMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuOrderMouseEntered
-        menuLabelEntered(menuOrder,"Order");
+        menuLabelEntered(menuOrder, "Order");
     }//GEN-LAST:event_menuOrderMouseEntered
 
     private void menuOrderMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuOrderMouseExited
-        menuLabelExited(menuOrder,"Order");
+        menuLabelExited(menuOrder, "Order");
     }//GEN-LAST:event_menuOrderMouseExited
 
     private void menuCustomersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuCustomersMouseClicked
@@ -525,18 +577,39 @@ public class MainForm extends javax.swing.JFrame {
         mainPanel.revalidate();
     }//GEN-LAST:event_menuDashboardMouseClicked
 
-    private void clearMainPanel(){
+    private void clearMainPanel() {
         mainPanel.removeAll();
         mainPanel.repaint();
         mainPanel.revalidate();
     }
-    
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Windows".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -544,19 +617,19 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
     }
-    
-    private void menuLabelEntered(JLabel label, String text){
+
+    private void menuLabelEntered(JLabel label, String text) {
         label.setOpaque(true);
         label.setText(text);
     }
-    
-    private void menuLabelExited(JLabel label, String text){
+
+    private void menuLabelExited(JLabel label, String text) {
         label.setOpaque(false);
-        label.setText(text+ " ");
+        label.setText(text + " ");
     }
-    
-    private void toggleMenu(){
-        int width = sidePanel.getWidth(); 
+
+    private void toggleMenu() {
+        int width = sidePanel.getWidth();
         Thread th = width == 0 ? new Thread() {
             @Override
             public void run() {
@@ -569,12 +642,12 @@ public class MainForm extends javax.swing.JFrame {
                         sidePanel.setSize(i, sidePanel.getHeight());
                         w -= 1;
                         mainPanel.setSize(w, h);
-                        headerPanel.setSize(headerPanel.getWidth()-1, headerPanel.getHeight());
+                        headerPanel.setSize(headerPanel.getWidth() - 1, headerPanel.getHeight());
                         x += 1;
                         mainPanel.setLocation(x, y);
-                        headerPanel.setLocation(headerPanel.getX()+1, headerPanel.getY());
-                        panelButton.setLocation(panelButton.getX()-1, panelButton.getY());
-                        sleep(1); 
+                        headerPanel.setLocation(headerPanel.getX() + 1, headerPanel.getY());
+                        panelButton.setLocation(panelButton.getX() - 1, panelButton.getY());
+                        sleep(1);
                     } catch (InterruptedException ex) {
 
                     }
@@ -592,11 +665,11 @@ public class MainForm extends javax.swing.JFrame {
                         sidePanel.setSize(i, sidePanel.getHeight());
                         w += 1;
                         mainPanel.setSize(w, h);
-                        headerPanel.setSize(headerPanel.getWidth()+1, headerPanel.getHeight());
+                        headerPanel.setSize(headerPanel.getWidth() + 1, headerPanel.getHeight());
                         x -= 1;
-                        mainPanel.setLocation(x, y); 
-                        headerPanel.setLocation(headerPanel.getX()-1, headerPanel.getY());
-                        panelButton.setLocation(panelButton.getX()+1, panelButton.getY());
+                        mainPanel.setLocation(x, y);
+                        headerPanel.setLocation(headerPanel.getX() - 1, headerPanel.getY());
+                        panelButton.setLocation(panelButton.getX() + 1, panelButton.getY());
                         sleep(1);
                     } catch (InterruptedException ex) {
 
