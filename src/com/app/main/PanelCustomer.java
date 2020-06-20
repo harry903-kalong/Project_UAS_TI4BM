@@ -6,7 +6,12 @@
 package com.app.main;
 
 import com.app.components.TextField;
+import com.app.entity.Customers;
+import com.app.entity.PageResult;
+import com.app.services.CustomerService;
+import com.app.tablemodel.CustomerTableModel;
 import java.awt.Color;
+import java.util.List;
 import javax.swing.BorderFactory;
 
 /**
@@ -15,11 +20,42 @@ import javax.swing.BorderFactory;
  */
 public class PanelCustomer extends javax.swing.JPanel {
 
+    private List<Customers> list;
+    private CustomerService service;
+    private PageResult<Customers> pageResult;
+    private CustomerTableModel tableModel;
+    private int page = 1;
+    private int pageSize = 10;
+
     /**
      * Creates new form PanelHome
      */
     public PanelCustomer() {
         initComponents();
+        
+        try {
+            service = new CustomerService();
+        } catch (Exception ex) {
+
+        }
+        loadData();
+    }
+
+    private void loadData() {
+        try {
+            String sort = ddlSort.getSelectedItem().toString();
+            sort = sort.replace(" ", "");
+            pageResult = service.getPage(page, pageSize, sort, ascending.isSelected());
+            tableModel = new CustomerTableModel(pageResult.getContent());
+            tableCustomer.setModel(tableModel);
+            labelTotalRow.setText(pageResult.getTotalElements() + "");
+            labelPage.setText("Page: " + page + " / " + pageResult.getTotalPages());
+            buttonNext.setEnabled(!pageResult.isLast());
+            buttonPrev.setEnabled(!pageResult.isFirst());
+
+        } catch (Exception ex) {
+
+        }
     }
 
     /**
@@ -31,20 +67,28 @@ public class PanelCustomer extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         line1 = new javax.swing.JPanel();
-        textCari = new TextField("Cari berdasarkan nama ...");
+        textCari = new TextField("Cari berdasarkan nama perusahaan ...");
         buttonCari = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableCustomer = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
+        buttonNext = new javax.swing.JButton();
+        buttonPrev = new javax.swing.JButton();
+        labelPage = new javax.swing.JLabel();
+        comboPerPage = new javax.swing.JComboBox<>();
+        labelTotal = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        labelTotalRow = new javax.swing.JLabel();
+        labelTotalRow2 = new javax.swing.JLabel();
+        ddlSort = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        ascending = new javax.swing.JRadioButton();
+        descending = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(204, 204, 204));
 
@@ -70,7 +114,7 @@ public class PanelCustomer extends javax.swing.JPanel {
 
         buttonCari.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/app/icons/icons8_search_24px.png"))); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableCustomer.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -81,57 +125,114 @@ public class PanelCustomer extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tableCustomer.setRowHeight(24);
+        jScrollPane1.setViewportView(tableCustomer);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jButton1.setText("Next");
+        buttonNext.setText("Next");
+        buttonNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonNextActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Prev");
+        buttonPrev.setText("Prev");
+        buttonPrev.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonPrevActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Page: 1 / 10");
+        labelPage.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        labelPage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelPage.setText("Page: 1 / 10");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "10", "25", "50", "100" }));
+        comboPerPage.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "10", "25", "50", "100" }));
+        comboPerPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboPerPageActionPerformed(evt);
+            }
+        });
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setText("Total Row: 100 Row(s)");
+        labelTotal.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        labelTotal.setText("Total Row: ");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel4.setText("Per Page");
+
+        labelTotalRow.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        labelTotalRow.setText("0");
+
+        labelTotalRow2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        labelTotalRow2.setText("row (s)");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 446, Short.MAX_VALUE)
+                .addComponent(labelTotal)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelTotalRow, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(labelTotalRow2, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 485, Short.MAX_VALUE)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(comboPerPage, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(labelPage, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
+                .addComponent(buttonPrev)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1))
+                .addComponent(buttonNext))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jLabel2)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
+                    .addComponent(buttonNext)
+                    .addComponent(buttonPrev)
+                    .addComponent(labelPage)
+                    .addComponent(comboPerPage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelTotal)
+                    .addComponent(jLabel4)
+                    .addComponent(labelTotalRow)
+                    .addComponent(labelTotalRow2))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
+
+        ddlSort.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Customer ID", "Company Name", "Contact Name", "Contact Title", "Address", "City" }));
+        ddlSort.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ddlSortActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Sort By: ");
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel3.setText("Direction:");
+
+        buttonGroup1.add(ascending);
+        ascending.setSelected(true);
+        ascending.setText("Ascending");
+        ascending.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ascendingActionPerformed(evt);
+            }
+        });
+
+        buttonGroup1.add(descending);
+        descending.setText("Descending");
+        descending.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                descendingActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -146,10 +247,21 @@ public class PanelCustomer extends javax.swing.JPanel {
                         .addComponent(textCari)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonCari))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(ddlSort, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(ascending)
+                                .addGap(18, 18, 18)
+                                .addComponent(descending)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -163,8 +275,15 @@ public class PanelCustomer extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(buttonCari, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(textCari, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(ddlSort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(ascending)
+                    .addComponent(descending))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7))
@@ -182,12 +301,44 @@ public class PanelCustomer extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void buttonNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNextActionPerformed
+        page++;
+        loadData();
+    }//GEN-LAST:event_buttonNextActionPerformed
+
+    private void buttonPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPrevActionPerformed
+        page--;
+        loadData();
+    }//GEN-LAST:event_buttonPrevActionPerformed
+
+    private void comboPerPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboPerPageActionPerformed
+        pageSize = Integer.valueOf(comboPerPage.getSelectedItem().toString());
+        page = 1;
+        loadData();
+    }//GEN-LAST:event_comboPerPageActionPerformed
+
+    private void ddlSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ddlSortActionPerformed
+        loadData();
+    }//GEN-LAST:event_ddlSortActionPerformed
+
+    private void ascendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ascendingActionPerformed
+        loadData();
+    }//GEN-LAST:event_ascendingActionPerformed
+
+    private void descendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descendingActionPerformed
+        loadData();
+    }//GEN-LAST:event_descendingActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton ascending;
     private javax.swing.JButton buttonCari;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton buttonNext;
+    private javax.swing.JButton buttonPrev;
+    private javax.swing.JComboBox<String> comboPerPage;
+    private javax.swing.JComboBox<String> ddlSort;
+    private javax.swing.JRadioButton descending;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -195,8 +346,12 @@ public class PanelCustomer extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel labelPage;
+    private javax.swing.JLabel labelTotal;
+    private javax.swing.JLabel labelTotalRow;
+    private javax.swing.JLabel labelTotalRow2;
     private javax.swing.JPanel line1;
+    private javax.swing.JTable tableCustomer;
     private javax.swing.JTextField textCari;
     // End of variables declaration//GEN-END:variables
 }

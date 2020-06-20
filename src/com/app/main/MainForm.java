@@ -8,6 +8,7 @@ package com.app.main;
 import com.app.entity.Customers;
 import com.app.entity.PageResult;
 import com.app.services.CustomerService;
+import com.app.tablemodel.CustomerTableModel;
 import java.awt.Image;
 import static java.lang.Thread.sleep;
 import java.util.List;
@@ -21,32 +22,15 @@ import javax.swing.JPanel;
  * @author Farmaku
  */
 public class MainForm extends javax.swing.JFrame {
-
-    private List<Customers> list;
-    private CustomerService service;
-    private PageResult<Customers> pageResult;
-
     /**
      * Creates new form MainForm
      */
     public MainForm() {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        service = new CustomerService();
-        //        setIcon();
-        try {
-            pageResult = service.getPage(1, 10);
-            Customers cus = service.getByID("ALFKI");
-            System.out.println("Company Name: " + cus.getCompanyName());
-        } catch (Exception ex) {
-            System.out.println("Error: " + ex.getMessage());
-        }
+        
 
-//        pageResult.getContent().forEach(cus -> {
-//            System.out.println("Company Name: " + cus.getCompanyName());
-//        });
     }
-   
 
     private void setIcon() {
         ImageIcon icon = new ImageIcon(getClass().getResource("/com/app/icons/northwindLogo1.png"));

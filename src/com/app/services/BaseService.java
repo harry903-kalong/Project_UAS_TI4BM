@@ -25,9 +25,10 @@ public class BaseService {
 
     String baseUrl;
 
-    public JSONObject get(int page, int pageSize) throws MalformedURLException, IOException {
+    public JSONObject get(int page, int pageSize, String sort, boolean asc) throws MalformedURLException, IOException {
         JSONObject result = null;
-        String pathUrl = Constant.BASE_URL + baseUrl + "?page=" + page + "&pageSize=" + pageSize;
+        String pathUrl = Constant.BASE_URL + baseUrl + "?page=" + page + "&pageSize=" + pageSize 
+                + "&sort=" + sort + "&asc=" + asc;
         System.out.println("pathUrl" + pathUrl);
         URL url = new URL(pathUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -51,7 +52,6 @@ public class BaseService {
     public JSONObject get(Object id) throws MalformedURLException, IOException {
         JSONObject result = null;
         String pathUrl = Constant.BASE_URL + baseUrl + "/" +id.toString();
-        System.out.println("pathUrl: " + pathUrl);
         URL url = new URL(pathUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
