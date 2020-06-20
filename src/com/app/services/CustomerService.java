@@ -30,11 +30,11 @@ public class CustomerService extends BaseService {
         baseUrl = "customers";
     }
 
-    public PageResult<Customers> getPage(int page, int pageSize, String sort, boolean asc) throws MalformedURLException, ProtocolException, IOException {
+    public PageResult<Customers> getPage(String search, int page, int pageSize, String sort, boolean asc) throws MalformedURLException, ProtocolException, IOException {
 
         PageResult<Customers> result = null;
         List<Customers> list = new ArrayList<>();
-        JSONObject obj = get(page, pageSize, sort, asc);
+        JSONObject obj = get(search, page, pageSize, sort, asc);
         JSONObject data = obj.optJSONObject("data");
         JSONArray content = data.optJSONArray("content");
         content.forEach(item -> {

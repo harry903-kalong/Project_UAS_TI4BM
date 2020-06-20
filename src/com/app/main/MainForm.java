@@ -28,8 +28,16 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() {
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
+        initMainPanel();
 
+    }
+    
+    private void initMainPanel(){
+        clearMainPanel();
+        JPanel panel = new PanelHome();
+        mainPanel.add(panel);
+        mainPanel.repaint();
+        mainPanel.revalidate();
     }
 
     private void setIcon() {

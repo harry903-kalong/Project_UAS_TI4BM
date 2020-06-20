@@ -11,6 +11,7 @@ import com.app.entity.PageResult;
 import com.app.services.CustomerService;
 import com.app.tablemodel.CustomerTableModel;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.BorderFactory;
 
@@ -43,9 +44,10 @@ public class PanelCustomer extends javax.swing.JPanel {
 
     private void loadData() {
         try {
+            String search = ((TextField)textCari).getTextSearch();
             String sort = ddlSort.getSelectedItem().toString();
             sort = sort.replace(" ", "");
-            pageResult = service.getPage(page, pageSize, sort, ascending.isSelected());
+            pageResult = service.getPage(search, page, pageSize, sort, ascending.isSelected());
             tableModel = new CustomerTableModel(pageResult.getContent());
             tableCustomer.setModel(tableModel);
             labelTotalRow.setText(pageResult.getTotalElements() + "");
@@ -111,8 +113,18 @@ public class PanelCustomer extends javax.swing.JPanel {
         );
 
         textCari.setForeground(new java.awt.Color(204, 204, 204));
+        textCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textCariKeyPressed(evt);
+            }
+        });
 
         buttonCari.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/app/icons/icons8_search_24px.png"))); // NOI18N
+        buttonCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonCariActionPerformed(evt);
+            }
+        });
 
         tableCustomer.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -126,6 +138,7 @@ public class PanelCustomer extends javax.swing.JPanel {
             }
         ));
         tableCustomer.setRowHeight(24);
+        tableCustomer.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tableCustomer);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -328,6 +341,16 @@ public class PanelCustomer extends javax.swing.JPanel {
     private void descendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descendingActionPerformed
         loadData();
     }//GEN-LAST:event_descendingActionPerformed
+
+    private void buttonCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCariActionPerformed
+        loadData();
+    }//GEN-LAST:event_buttonCariActionPerformed
+
+    private void textCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textCariKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER){
+            loadData();
+        }
+    }//GEN-LAST:event_textCariKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -43,4 +43,13 @@ public class TextField extends JTextField {
                 getBorder(),
                 BorderFactory.createEmptyBorder(0, 5, 0, 5)));
     }
+    
+    public String getTextSearch() {
+        if (super.getText().equals(placeHolder)) {
+            return "";
+        }
+        return super.getText();
+    }
+    
+    
 }
