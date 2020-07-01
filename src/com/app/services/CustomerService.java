@@ -30,7 +30,8 @@ public class CustomerService extends BaseService {
         baseUrl = "customers";
     }
 
-    public PageResult<Customers> getPage(String search, int page, int pageSize, String sort, boolean asc) throws MalformedURLException, ProtocolException, IOException {
+    public PageResult<Customers> getPage(String search, int page, int pageSize, String sort, boolean asc)
+            throws MalformedURLException, ProtocolException, IOException {
 
         PageResult<Customers> result = null;
         List<Customers> list = new ArrayList<>();
@@ -49,8 +50,8 @@ public class CustomerService extends BaseService {
         result = new PageResult<>(list, totalElements, totalPages, first, last);
         return result;
     }
-    
-    public Customers getByID(String id) throws IOException{
+
+    public Customers getByID(String id) throws IOException {
         Customers customers = null;
         JSONObject obj = get(id);
         JSONObject cus = obj.optJSONObject("data");
