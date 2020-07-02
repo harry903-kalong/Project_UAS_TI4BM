@@ -5,13 +5,21 @@
  */
 package com.app.entity;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
  * @author ahza0
  */
-public class PageResult <T> {
+public class PageResult<T> {
+
     private List<T> content;
     private int totalElements;
     private int totalPages;
@@ -19,6 +27,23 @@ public class PageResult <T> {
     private boolean last;
 
     public PageResult() {
+    }
+
+    public PageResult(JSONObject data, Class<T> cls) {
+        JSONArray items = data.optJSONArray("content");
+        content = new ArrayList<>();
+        items.forEach(item -> {
+            JSONObject jItem = (JSONObject) item;
+            try {
+                T e = cls.getDeclaredConstructor(JSONObject.class).newInstance(jItem);
+                content.add(e);
+            } catch (Exception ex) {
+            }
+        });
+        totalElements = data.optInt("totalElements", 0);
+        totalPages = data.optInt("totalPages", 0);
+        first = data.optBoolean("first", false);
+        last = data.optBoolean("last", false);
     }
 
     public PageResult(List<T> content, int totalElements, int totalPages, boolean first, boolean last) {
@@ -68,6 +93,5 @@ public class PageResult <T> {
     public void setLast(boolean last) {
         this.last = last;
     }
-    
-    
+
 }

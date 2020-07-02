@@ -55,6 +55,22 @@ public class Customers {
         this.phone = phone;
         this.fax = fax;
     }
+    
+    public JSONObject toJson(){
+        JSONObject json = new JSONObject();
+        json.put("customerID", customerID);
+        json.put("companyName", companyName);
+        json.put("contactName", contactName);
+        json.put("contactTitle", contactTitle);
+        json.put("address", address);
+        json.put("city", city);
+        json.put("region", region);
+        json.put("postalCode", postalCode);
+        json.put("country", country);
+        json.put("phone", phone);
+        json.put("fax", fax);
+        return json;
+    }
 
     public String getCustomerID() {
         return customerID;

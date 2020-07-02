@@ -10,10 +10,8 @@ import com.app.entity.Customers;
 import com.app.entity.PageResult;
 import com.app.services.CustomerService;
 import com.app.tablemodel.CustomerTableModel;
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.List;
-import javax.swing.BorderFactory;
 
 /**
  *
@@ -56,7 +54,7 @@ public class PanelCustomer extends javax.swing.JPanel {
             buttonPrev.setEnabled(!pageResult.isFirst());
 
         } catch (Exception ex) {
-
+            
         }
     }
 

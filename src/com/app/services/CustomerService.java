@@ -5,19 +5,12 @@
  */
 package com.app.services;
 
-import com.app.commons.Constant;
 import com.app.entity.Customers;
 import com.app.entity.PageResult;
-import java.io.BufferedReader;
+import com.app.entity.Result;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -32,29 +25,16 @@ public class CustomerService extends BaseService {
 
     public PageResult<Customers> getPage(String search, int page, int pageSize, String sort, boolean asc)
             throws MalformedURLException, ProtocolException, IOException {
-
-        PageResult<Customers> result = null;
-        List<Customers> list = new ArrayList<>();
-        JSONObject obj = get(search, page, pageSize, sort, asc);
-        JSONObject data = obj.optJSONObject("data");
-        JSONArray content = data.optJSONArray("content");
-        content.forEach(item -> {
-            JSONObject cus = (JSONObject) item;
-            Customers customers = new Customers(cus);
-            list.add(customers);
-        });
-        int totalElements = data.optInt("totalElements", 0);
-        int totalPages = data.optInt("totalPages", 0);
-        boolean first = data.optBoolean("first", false);
-        boolean last = data.optBoolean("last", false);
-        result = new PageResult<>(list, totalElements, totalPages, first, last);
-        return result;
+        PageResult<Customers> pageResult = null;
+        Result result = get(search, page, pageSize, sort, asc);
+        pageResult = new PageResult<>(result.getData(), Customers.class);
+        return pageResult;
     }
 
-    public Customers getByID(String id) throws IOException {
+    public Customers getByID(String id) throws IOException, Exception {
         Customers customers = null;
-        JSONObject obj = get(id);
-        JSONObject cus = obj.optJSONObject("data");
+        Result result = get(id);
+        JSONObject cus = result.getData();
         customers = new Customers(cus);
         return customers;
     }
