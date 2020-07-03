@@ -5,13 +5,8 @@
  */
 package com.app.main;
 
-import com.app.entity.Customers;
-import com.app.entity.PageResult;
-import com.app.services.CustomerService;
-import com.app.tablemodel.CustomerTableModel;
 import java.awt.Image;
 import static java.lang.Thread.sleep;
-import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;

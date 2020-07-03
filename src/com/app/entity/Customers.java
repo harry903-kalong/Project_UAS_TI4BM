@@ -168,7 +168,7 @@ public class Customers {
             case 3: return contactTitle;
             case 4: return address;
             case 5: return city;
-            case 6: return region;
+            case 6: return country;
             case 7: return postalCode;
             case 8: return country;
             case 9: return phone;

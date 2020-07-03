@@ -8,15 +8,13 @@ package com.app.entity;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
  *
  * @author ahza0
+ * @param <T>
  */
 public class PageResult<T> {
 
@@ -37,7 +35,7 @@ public class PageResult<T> {
             try {
                 T e = cls.getDeclaredConstructor(JSONObject.class).newInstance(jItem);
                 content.add(e);
-            } catch (Exception ex) {
+            } catch (IllegalAccessException | IllegalArgumentException | InstantiationException | NoSuchMethodException | SecurityException | InvocationTargetException ex) {
             }
         });
         totalElements = data.optInt("totalElements", 0);

@@ -9,7 +9,7 @@ import com.app.components.TextField;
 import com.app.entity.Customers;
 import com.app.entity.PageResult;
 import com.app.services.CustomerService;
-import com.app.tablemodel.CustomerTableModel;
+import com.app.tablemodel.AppTableModel;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
@@ -22,9 +22,10 @@ public class PanelCustomer extends javax.swing.JPanel {
     private List<Customers> list;
     private CustomerService service;
     private PageResult<Customers> pageResult;
-    private CustomerTableModel tableModel;
+    private AppTableModel<Customers> tableModel;
     private int page = 1;
     private int pageSize = 10;
+    private String[] columnNames = new String[]{"Customer ID", "Company Name", "Contact Name", "Contact Title","Address", "City", "Country"};
 
     /**
      * Creates new form PanelHome
@@ -45,8 +46,8 @@ public class PanelCustomer extends javax.swing.JPanel {
             String search = ((TextField)textCari).getTextSearch();
             String sort = ddlSort.getSelectedItem().toString();
             sort = sort.replace(" ", "");
-            pageResult = service.getPage(search, page, pageSize, sort, ascending.isSelected());
-            tableModel = new CustomerTableModel(pageResult.getContent());
+            pageResult = service.getPage(search, page, pageSize, sort, ascending.isSelected());            
+            tableModel = new AppTableModel<>(pageResult.getContent(), columnNames);
             tableCustomer.setModel(tableModel);
             labelTotalRow.setText(pageResult.getTotalElements() + "");
             labelPage.setText("Page: " + page + " / " + pageResult.getTotalPages());

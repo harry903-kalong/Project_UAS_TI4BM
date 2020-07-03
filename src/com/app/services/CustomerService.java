@@ -38,4 +38,16 @@ public class CustomerService extends BaseService {
         customers = new Customers(cus);
         return customers;
     }
+    
+    public Result create(Customers customers) throws IOException{
+        return post(customers.toJson());
+    }
+    
+    public Result update(Customers customers) throws IOException{
+        return put(customers.toJson());
+    }
+        
+    public Result remove(String id) throws IOException{
+        return delete(id);
+    }
 }

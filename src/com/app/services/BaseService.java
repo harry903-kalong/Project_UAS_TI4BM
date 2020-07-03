@@ -88,7 +88,7 @@ public class BaseService {
         return result;
     }
 
-    public Result delete(Object id) throws MalformedURLException, IOException, Exception {
+    public Result delete(Object id) throws MalformedURLException, IOException {
         Result result = null;
         String pathUrl = Constant.BASE_URL + baseUrl + "/" + id.toString();
         URL url = new URL(pathUrl);
