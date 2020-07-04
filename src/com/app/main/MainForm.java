@@ -167,6 +167,9 @@ public class MainForm extends javax.swing.JFrame {
         menuProducts.setIconTextGap(10);
         menuProducts.setInheritsPopupMenu(false);
         menuProducts.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuProductsMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 menuProductsMouseEntered(evt);
             }
@@ -528,6 +531,14 @@ public class MainForm extends javax.swing.JFrame {
         mainPanel.repaint();
         mainPanel.revalidate();
     }//GEN-LAST:event_menuDashboardMouseClicked
+
+    private void menuProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuProductsMouseClicked
+        clearMainPanel();
+        JPanel panel = new PanelProduct();
+        mainPanel.add(panel);
+        mainPanel.repaint();
+        mainPanel.revalidate();
+    }//GEN-LAST:event_menuProductsMouseClicked
 
     private void clearMainPanel() {
         mainPanel.removeAll();

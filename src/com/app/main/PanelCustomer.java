@@ -19,7 +19,6 @@ import java.util.List;
  */
 public class PanelCustomer extends javax.swing.JPanel {
 
-    private List<Customers> list;
     private CustomerService service;
     private PageResult<Customers> pageResult;
     private AppTableModel<Customers> tableModel;
@@ -31,13 +30,8 @@ public class PanelCustomer extends javax.swing.JPanel {
      * Creates new form PanelHome
      */
     public PanelCustomer() {
-        initComponents();
-        
-        try {
-            service = new CustomerService();
-        } catch (Exception ex) {
-
-        }
+        initComponents();        
+        service = new CustomerService();
         loadData();
     }
 
