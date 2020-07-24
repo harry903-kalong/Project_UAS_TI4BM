@@ -66,7 +66,7 @@ public class MainForm extends javax.swing.JFrame {
         menuSupplier = new javax.swing.JLabel();
         menuRegion = new javax.swing.JLabel();
         menuShipper = new javax.swing.JLabel();
-        menuOrder = new javax.swing.JLabel();
+        menuUsers = new javax.swing.JLabel();
         mainPanel = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         headerPanel = new javax.swing.JPanel();
@@ -167,6 +167,9 @@ public class MainForm extends javax.swing.JFrame {
         menuProducts.setIconTextGap(10);
         menuProducts.setInheritsPopupMenu(false);
         menuProducts.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuProductsMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 menuProductsMouseEntered(evt);
             }
@@ -247,21 +250,24 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        menuOrder.setBackground(new java.awt.Color(102, 102, 255));
-        menuOrder.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        menuOrder.setForeground(new java.awt.Color(255, 255, 255));
-        menuOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/app/icons/icons8_purchase_order_24px.png"))); // NOI18N
-        menuOrder.setText("Orders");
-        menuOrder.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 1));
-        menuOrder.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        menuOrder.setIconTextGap(10);
-        menuOrder.setInheritsPopupMenu(false);
-        menuOrder.addMouseListener(new java.awt.event.MouseAdapter() {
+        menuUsers.setBackground(new java.awt.Color(102, 102, 255));
+        menuUsers.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        menuUsers.setForeground(new java.awt.Color(255, 255, 255));
+        menuUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/app/icons/icons8_purchase_order_24px.png"))); // NOI18N
+        menuUsers.setText("Users");
+        menuUsers.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 10, 1, 1));
+        menuUsers.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        menuUsers.setIconTextGap(10);
+        menuUsers.setInheritsPopupMenu(false);
+        menuUsers.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuUsersMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                menuOrderMouseEntered(evt);
+                menuUsersMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                menuOrderMouseExited(evt);
+                menuUsersMouseExited(evt);
             }
         });
 
@@ -283,7 +289,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(sidePanelLayout.createSequentialGroup()
                 .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(menuShipper, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(menuOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(menuUsers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE))
@@ -309,7 +315,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(menuShipper, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(menuOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(menuUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(sidePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(sidePanelLayout.createSequentialGroup()
@@ -488,11 +494,11 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_menuSupplierMouseExited
 
     private void menuRegionMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuRegionMouseEntered
-        menuLabelEntered(menuRegion, "Regions");
+        menuLabelEntered(menuRegion, "Region");
     }//GEN-LAST:event_menuRegionMouseEntered
 
     private void menuRegionMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuRegionMouseExited
-        menuLabelExited(menuRegion, "Regios");
+        menuLabelExited(menuRegion, "Region");
     }//GEN-LAST:event_menuRegionMouseExited
 
     private void menuShipperMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuShipperMouseEntered
@@ -503,13 +509,13 @@ public class MainForm extends javax.swing.JFrame {
         menuLabelExited(menuShipper, "Shipper");
     }//GEN-LAST:event_menuShipperMouseExited
 
-    private void menuOrderMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuOrderMouseEntered
-        menuLabelEntered(menuOrder, "Order");
-    }//GEN-LAST:event_menuOrderMouseEntered
+    private void menuUsersMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuUsersMouseEntered
+        menuLabelEntered(menuUsers, "Users");
+    }//GEN-LAST:event_menuUsersMouseEntered
 
-    private void menuOrderMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuOrderMouseExited
-        menuLabelExited(menuOrder, "Order");
-    }//GEN-LAST:event_menuOrderMouseExited
+    private void menuUsersMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuUsersMouseExited
+        menuLabelExited(menuUsers, "Users");
+    }//GEN-LAST:event_menuUsersMouseExited
 
     private void menuCustomersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuCustomersMouseClicked
         clearMainPanel();
@@ -528,6 +534,22 @@ public class MainForm extends javax.swing.JFrame {
         mainPanel.repaint();
         mainPanel.revalidate();
     }//GEN-LAST:event_menuDashboardMouseClicked
+
+    private void menuProductsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuProductsMouseClicked
+        clearMainPanel();
+        JPanel panel = new PanelUsers();
+        mainPanel.add(panel);
+        mainPanel.repaint();
+        mainPanel.revalidate();
+    }//GEN-LAST:event_menuProductsMouseClicked
+
+    private void menuUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuUsersMouseClicked
+        clearMainPanel();
+        JPanel panel = new PanelUsers();
+        mainPanel.add(panel);
+        mainPanel.repaint();
+        mainPanel.revalidate();
+    }//GEN-LAST:event_menuUsersMouseClicked
 
     private void clearMainPanel() {
         mainPanel.removeAll();
@@ -560,6 +582,9 @@ public class MainForm extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
@@ -646,11 +671,11 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel menuCustomers;
     private javax.swing.JLabel menuDashboard;
     private javax.swing.JLabel menuMyAccount;
-    private javax.swing.JLabel menuOrder;
     private javax.swing.JLabel menuProducts;
     private javax.swing.JLabel menuRegion;
     private javax.swing.JLabel menuShipper;
     private javax.swing.JLabel menuSupplier;
+    private javax.swing.JLabel menuUsers;
     private javax.swing.JPanel panelButton;
     private javax.swing.JPanel sidePanel;
     // End of variables declaration//GEN-END:variables
